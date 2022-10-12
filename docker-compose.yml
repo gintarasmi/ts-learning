@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  ts-node-docker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: base
+    volumes:
+      - ./src:/home/node/app/src
+      - ./nodemon.json:/home/node/app/nodemon.json
+    container_name: ts-node-zero-docker
+    expose:
+      - ${PORT}
+    ports:
+      - '${PORT}:${PORT}'
+    command: npm run dev
+    env_file:
+      - .env
+    links:
+      - redis
+  redis:
+    container_name: redis
+    image: redis
+    ports:
+      - 6379:6379
